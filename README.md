@@ -25,13 +25,27 @@ rk@rk:~/rknn-toolkit2/package$ python3
 ## Helmet Yolov5 to ONNX
 
 将yolov5s.pt转成yolov5s.onnx
+
+```
 cd yolov5s-to-onnx
+```
+
 1、安装依赖环境，跟上述环境有重叠的地方，一般不冲突
+
+```
 pip install -r yolov5_requirements.txt
+```
+
 2、将yolov5s的模型放到weights中
+
 3、模型转换
+
+```
 python export.py --weights ./weights/yolov5s.pt --img-size 640 --batch 1 --rknn_mode
+```
+
 如果成果则会在weights中生成yolov5s.onnx
+
 4、将yolov5s.onnx转成yolov5s.rknn
 
 ## ONNX to RKNN
