@@ -74,15 +74,20 @@ python test.py
 
 ## RKNN to deploy
 
-5、将yolov5s.rknn部署到rk3399或其他芯片的板子上。
-进入到rknn_to_deploy/examples/yolov5s目录中
-执行
+将yolov5s.rknn部署到rk3399或其他芯片的板子上，进入到rknn_to_deploy/examples/yolov5s目录中执行
+
+```
 bash build-linux.sh
-如果成功则生成install跟build两个文件夹
-将install文件放到板子上，执行
+```
+
+如果成功则生成install跟build两个文件夹将install文件放到板子上，执行
+
+```
 ./yolov5s_demo
+```
+
 可以看到在model生成了out.jpg
-走到这一步，恭喜你已经完成模型的布署。
+
 参考来源：https://github.com/mrwangwg123/my-rknn-yolov5
 参考来源：https://github.com/ultralytics/yolov5
 参考来源：https://github.com/airockchip/yolov5
