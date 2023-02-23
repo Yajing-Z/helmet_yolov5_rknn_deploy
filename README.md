@@ -7,36 +7,39 @@
 
 2、 安装RKNN-Toolkit 
 
-1. 安装 Python3.6 和 pip3，也可以用conda创建一个虚拟环境
+- 安装 Python3.6 和 pip3，也可以用conda创建一个虚拟环境
 
-  ```
-  sudo apt-get install python3 python3-dev python3-pip
-  ```
-2. 安装相关依赖
+```
+sudo apt-get install python3 python3-dev python3-pip
+```
 
-  ```
-  sudo apt-get install libxslt1-dev zlib1g zlib1g-dev libglib2.0-0 libsm6 \
-  libgl1-mesa-glx libprotobuf-dev gcc
-  ```
+- 安装相关依赖
 
-  3、安装python相关环境
+```
+sudo apt-get install libxslt1-dev zlib1g zlib1g-dev libglib2.0-0 libsm6 \
+libgl1-mesa-glx libprotobuf-dev gcc
+```
 
-  ```
-  cd onnx_to_rknn
-  pip install -r requirements-1.1.0.txt
-  ```
+3、安装python相关环境
 
-  4、安装rknn-toolkit
-  进入到3rdparty_yolov5s_rknn_deploy/onnx_to_rknn_3rdparty第三方库中
+```
+cd onnx_to_rknn
+pip install -r requirements-1.1.0.txt
+```
 
-  ```
-  sudo pip3 install rknn_toolkit2*.whl
-  ```
+4、安装rknn-toolkit
+进入到3rdparty_yolov5s_rknn_deploy/onnx_to_rknn_3rdparty第三方库中
 
-  5、检查 RKNN-Toolkit 是否安装成功
-  rk@rk:~/rknn-toolkit2/package$ python3
+```
+sudo pip3 install rknn_toolkit2*.whl
+```
+
+5、检查 RKNN-Toolkit 是否安装成功
+
+>>> rk@rk:~/rknn-toolkit2/package$ python3
+>>>>>
 >>> from rknn.api import RKNN
->>>
+>
 
 ## Helmet Yolov5 to ONNX
 
@@ -62,9 +65,9 @@ python export.py --weights ./weights/yolov5s.pt --img-size 640 --batch 1 --rknn_
 
 如果成果则会在weights中生成yolov5s.onnx
 
-4、将yolov5s.onnx转成yolov5s.rknn
-
 ## ONNX to RKNN
+
+将yolov5s.onnx转成yolov5s.rknn
 
 1、将生成的yolov5s.onnx放到onnx_to_rknn/examples/onnx/yolov5s中
 
@@ -78,11 +81,11 @@ cd onnx_to_rknn/examples/onnx/yolov5s
 python test.py
 ```
 
-如果成功则会在目录下生成yolov5s.onnx，同时生成结果照片
+如果成功则会在目录下生成yolov5s.rknn，同时生成结果照片
 
 ## RKNN to deploy
 
-将yolov5s.rknn部署到rk3399或其他芯片的板子上，进入到rknn_to_deploy/examples/yolov5s目录中执行
+将yolov5s.rknn部署到rk3568或其他芯片的板子上，进入到rknn_to_deploy/examples/yolov5s目录中执行
 
 ```
 bash build-linux.sh
