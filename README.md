@@ -1,8 +1,11 @@
 # Helmet-YOLOv5 Deploy to RK3568
+
+## Prerequisite
 1、下载第三方库opencv：
 链接：https://pan.baidu.com/s/1CvXOsnHHaZzxcMh_-x5Ffg 提取码：qkr7
 将3rdparty_yolov5s_rknn_deploy/rknn_to_deploy_3rdparty/opencv放到rknn_to_deploy/examples/3rdparty/中
 2、 安装RKNN-Toolkit 
+
 1. 安装 Python3.6 和 pip3，也可以用conda创建一个虚拟环境
 sudo apt-get install python3 python3-dev python3-pip
 2. 安装相关依赖
@@ -18,7 +21,10 @@ sudo pip3 install rknn_toolkit2*.whl
 rk@rk:~/rknn-toolkit2/package$ python3
 >>> from rknn.api import RKNN
 >>>
-3、将yolov5s.pt转成yolov5s.onnx
+
+## Helmet Yolov5 to ONNX
+
+将yolov5s.pt转成yolov5s.onnx
 cd yolov5s-to-onnx
 1、安装依赖环境，跟上述环境有重叠的地方，一般不冲突
 pip install -r yolov5_requirements.txt
@@ -27,11 +33,16 @@ pip install -r yolov5_requirements.txt
 python export.py --weights ./weights/yolov5s.pt --img-size 640 --batch 1 --rknn_mode
 如果成果则会在weights中生成yolov5s.onnx
 4、将yolov5s.onnx转成yolov5s.rknn
+
+## ONNX to RKNN
+
 1、将生成的yolov5s.onnx放到onnx_to_rknn/examples/onnx/yolov5s中
 cd onnx_to_rknn/examples/onnx/yolov5s
 2、模型转换
 python test.py
 如果成功则会在目录下生成yolov5s.onnx，同时生成结果照片
+
+## RKNN to deploy
 
 5、将yolov5s.rknn部署到rk3399或其他芯片的板子上。
 进入到rknn_to_deploy/examples/yolov5s目录中
