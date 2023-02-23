@@ -3,6 +3,7 @@
 ## Prerequisite
 1、下载第三方库opencv：
 链接：https://pan.baidu.com/s/1CvXOsnHHaZzxcMh_-x5Ffg 提取码：qkr7
+
 将3rdparty_yolov5s_rknn_deploy/rknn_to_deploy_3rdparty/opencv放到rknn_to_deploy/examples/3rdparty/中
 
 2、 安装RKNN-Toolkit 
