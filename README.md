@@ -67,9 +67,17 @@ python export.py --weights ./weights/yolov5s.pt --img-size 640 --batch 1 --rknn_
 ## ONNX to RKNN
 
 1、将生成的yolov5s.onnx放到onnx_to_rknn/examples/onnx/yolov5s中
+
+```
 cd onnx_to_rknn/examples/onnx/yolov5s
+```
+
 2、模型转换
+
+```
 python test.py
+```
+
 如果成功则会在目录下生成yolov5s.onnx，同时生成结果照片
 
 ## RKNN to deploy
