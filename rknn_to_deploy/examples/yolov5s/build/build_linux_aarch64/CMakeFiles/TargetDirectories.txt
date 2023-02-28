@@ -1,7 +1,0 @@
-/home/liuqi/project-Toolkit2/yolov5s_rknn_deploy/rknn_to_deploy/examples/yolov5s/build/build_linux_aarch64/CMakeFiles/install/strip.dir
-/home/liuqi/project-Toolkit2/yolov5s_rknn_deploy/rknn_to_deploy/examples/yolov5s/build/build_linux_aarch64/CMakeFiles/install/local.dir
-/home/liuqi/project-Toolkit2/yolov5s_rknn_deploy/rknn_to_deploy/examples/yolov5s/build/build_linux_aarch64/CMakeFiles/install.dir
-/home/liuqi/project-Toolkit2/yolov5s_rknn_deploy/rknn_to_deploy/examples/yolov5s/build/build_linux_aarch64/CMakeFiles/list_install_components.dir
-/home/liuqi/project-Toolkit2/yolov5s_rknn_deploy/rknn_to_deploy/examples/yolov5s/build/build_linux_aarch64/CMakeFiles/rebuild_cache.dir
-/home/liuqi/project-Toolkit2/yolov5s_rknn_deploy/rknn_to_deploy/examples/yolov5s/build/build_linux_aarch64/CMakeFiles/edit_cache.dir
-/home/liuqi/project-Toolkit2/yolov5s_rknn_deploy/rknn_to_deploy/examples/yolov5s/build/build_linux_aarch64/CMakeFiles/yolov5s_demo.dir

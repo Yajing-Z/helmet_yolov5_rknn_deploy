@@ -1,7 +1,0 @@
-/home/liuqi/project-Toolkit2/yolov5s_rknn_deploy/rknn_to_deploy/examples/yolov5s/install/yolov5s_demo_Linux/./yolov5s_demo
-/home/liuqi/project-Toolkit2/yolov5s_rknn_deploy/rknn_to_deploy/examples/yolov5s/install/yolov5s_demo_Linux/.//model/yolov5s-640-640.rknn
-/home/liuqi/project-Toolkit2/yolov5s_rknn_deploy/rknn_to_deploy/examples/yolov5s/install/yolov5s_demo_Linux/.//model/test.jpg
-/home/liuqi/project-Toolkit2/yolov5s_rknn_deploy/rknn_to_deploy/examples/yolov5s/install/yolov5s_demo_Linux/.//model/road.bmp
-/home/liuqi/project-Toolkit2/yolov5s_rknn_deploy/rknn_to_deploy/examples/yolov5s/install/yolov5s_demo_Linux/.//model/coco_labels_list.txt
-/home/liuqi/project-Toolkit2/yolov5s_rknn_deploy/rknn_to_deploy/examples/yolov5s/install/yolov5s_demo_Linux/lib/librknn_api.so
-/home/liuqi/project-Toolkit2/yolov5s_rknn_deploy/rknn_to_deploy/examples/yolov5s/install/yolov5s_demo_Linux/lib/librknnrt.so

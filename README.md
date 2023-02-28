@@ -1,109 +1,147 @@
-# Helmet-YOLOv5 Deploy to RK3568
+# Helmet-YOLOv5 Model Deploy to RK3568
 
-## Prerequisite
-1、下载第三方库opencv：
-链接：https://pan.baidu.com/s/1CvXOsnHHaZzxcMh_-x5Ffg 提取码：qkr7
+## Helmet RKNN Model to deploy in RK3568
 
-将3rdparty_yolov5s_rknn_deploy/rknn_to_deploy_3rdparty/opencv放到rknn_to_deploy/examples/3rdparty/中
+这里我们直接进行将已生成好的helmet-640-640.rknn模型，部署到rk3568或其他芯片的板子上的过程
 
-2、 安装RKNN-Toolkit 
+1. Install requirements (这里的以Debian10，Python3.7环境为例)
 
-- 安装 Python3.6 和 pip3，也可以用conda创建一个虚拟环境
+```bash
+sudo apt update
 
+#安装其他python工具
+sudo apt-get install python3-dev python3-pip gcc
+
+#安装相关依赖和软件包
+sudo apt-get install -y python3-opencv
+sudo apt-get install -y python3-numpy
+sudo apt -y install python3-setuptools
+sudo pip3 install wheel
 ```
-sudo apt-get install python3 python3-dev python3-pip
+
+2. Toolkit Lite2工具安装及python依赖环境安装：
+
+```bash
+git clone https://github.com/harperjuanl/helmet_yolov5_rknn_deploy.git
+cd helmet_yolov5_rknn_deploy/rknn_to_deploy/
+sudo pip3 install rknn_toolkit_lite2-1.4.0-cp37-cp37m-linux_aarch64.whl
+sudo pip3 install -r requirements.txt -i https://mirrors.aliyun.com/pypi/simple/
+
+# 检查Toolkit Lite2是否安装成功
+pip3 list | grep rknn-toolkit-lite2
+rknn-toolkit-lite2           1.4.0
 ```
 
-- 安装相关依赖
+3. Model deployment and inference test
 
+```bash
+cd rknn_to_deploy/examples/yolov5s
+# you can also upload images to the folder and choose the image you want to detect
+python3 inference.py --img test.jpg  
 ```
-sudo apt-get install libxslt1-dev zlib1g zlib1g-dev libglib2.0-0 libsm6 \
+
+图片检测结果可以在model里生成了test_result.jpg看到
+
+![image]()
+
+## Helmet Model convert to RKNN Model in PC platform
+
+You can also try the progress of AI model convert to rknn model in your ubuntu machine (the generated rknn model is needed in the above rk3568 chip)
+
+### Prerequisite
+
+1. 安装基础依赖（我们这里使用的环境是PC ubuntu20.04，ubuntu20.04默认是安装了python3.8.10）
+
+```bash
+sudo apt update
+sudo apt-get install python3-dev python3-pip python3.8-venv gcc
+
+#安装相关库和软件包
+sudo apt-get install libxslt1-dev zlib1g-dev libglib2.0 libsm6 \
 libgl1-mesa-glx libprotobuf-dev gcc
 ```
 
-3、安装python相关环境
+2. 安装rknn-toolkit2
+
+```bash
+#创建目录，由于测试使用的ubuntu20.04已经安装的包可能和安装运行RKNN-Toolkit2所需的包版本不同,为避免其他问题，这里使用python venv隔离环境
+mkdir project-Toolkit2 && cd project-Toolkit2
+python3 -m venv .toolkit2_env
+# 激活进入环境
+source .toolkit2_env/bin/activate
+
+#拉取源码，或者复制RKNN-Toolkit2到该目录
+git clone https://github.com/rockchip-linux/rknn-toolkit2.git
+
+#使用pip3安装包时可能很慢，设置下源
+pip3 config set global.index-url https://mirror.baidu.com/pypi/simple
+
+#安装依赖库，根据rknn-toolkit2\doc\requirements_cp38-1.4.0.txt
+pip3 install numpy
+pip3 install -r doc/requirements_cp38-1.4.0.txt
+
+#安装rknn_toolkit2
+pip3 install packages/rknn_toolkit2-1.4.0_22dcfef4-cp38-cp38-linux_x86_64.whl
 
 ```
-cd onnx_to_rknn
-pip install -r requirements-1.1.0.txt
-```
 
-4、安装rknn-toolkit
-进入到3rdparty_yolov5s_rknn_deploy/onnx_to_rknn_3rdparty第三方库中
+3. 检查 RKNN-Toolkit 是否安装成功
 
-```
-sudo pip3 install rknn_toolkit2*.whl
-```
-
-5、检查 RKNN-Toolkit 是否安装成功
-
->>> rk@rk:~/rknn-toolkit2/package$ python3
->>>>>
+```bash
+$ python3 
+Python 3.8.10 (default, Jun 22 2022, 20:18:18)
+[GCC 9.4.0] on linux
+Type "help", "copyright", "credits" or "license" for more information.
 >>> from rknn.api import RKNN
->
-
-## Helmet Yolov5 to ONNX
-
-将yolov5s.pt转成yolov5s.onnx
-
-```
-cd yolov5s-to-onnx
+>>>
 ```
 
-1、安装依赖环境，跟上述环境有重叠的地方，一般不冲突
+### Helmet Yolov5 to ONNX
+
+将helmet.pt转成helmet.onnx
 
 ```
-pip install -r yolov5_requirements.txt
+cd helmet_yolov5_rknn_deploy/yolov5s-to-onnx
 ```
 
-2、将yolov5s的模型放到weights中
-
-3、模型转换
+1. 安装依赖环境
 
 ```
-python export.py --weights ./weights/yolov5s.pt --img-size 640 --batch 1 --rknn_mode
+pip3 install -r yolov5_requirements.txt
 ```
 
-如果成果则会在weights中生成yolov5s.onnx
-
-## ONNX to RKNN
-
-将yolov5s.onnx转成yolov5s.rknn
-
-1、将生成的yolov5s.onnx放到onnx_to_rknn/examples/onnx/yolov5s中
+2. 将helmet-yolov5的模型放到weights中，模型转换
 
 ```
+python3 export.py --weights ./weights/helmet.pt --img-size 640 --batch 1 --rknn_mode
+```
+
+如果成功，则会在weights中生成helmet.onnx
+
+### ONNX to RKNN
+
+将helmet.onnx转成helmet.rknn
+
+1. 将生成的helmet.onnx放到onnx_to_rknn/examples/onnx/yolov5s中
+
+```bash
 cd onnx_to_rknn/examples/onnx/yolov5s
 ```
 
-2、模型转换
+2. 进行模型转换以及图片测试
 
-```
-python test.py
-```
-
-如果成功则会在目录下生成yolov5s.rknn，同时生成结果照片
-
-## RKNN to deploy
-
-将yolov5s.rknn部署到rk3568或其他芯片的板子上，进入到rknn_to_deploy/examples/yolov5s目录中执行
-
-```
-bash build-linux.sh
+```bash
+python3 test.py
 ```
 
-如果成功则生成install跟build两个文件夹将install文件放到板子上，执行
+如果成功，则会在目录下生成helmet-640-640.rknn，同时生成测试结果照片。而helmet-640-640.rknn会在RK3568板子上部署helmet detection model时用到
 
-```
-./yolov5s_demo
-```
+![image]()
 
-可以看到在model生成了out.jpg
+## Reference
 
-参考来源：https://github.com/mrwangwg123/my-rknn-yolov5
+参考来源：https://github.com/rockchip-linux/rknn-toolkit2
 
 参考来源：https://github.com/ultralytics/yolov5
-
-参考来源：https://github.com/airockchip/yolov5
 
 参考来源：https://github.com/Dreamdreams8/yolov5s_rknn_deploy
