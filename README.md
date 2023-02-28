@@ -42,7 +42,7 @@ python3 inference.py --img test.jpg
 
 图片检测结果可以在model里生成了test_result.jpg看到
 
-![image]()
+![image](https://github.com/harperjuanl/helmet_yolov5_rknn_deploy/blob/main/imgs/rknn_inference.png)
 
 ## Helmet Model convert to RKNN Model in PC platform
 
@@ -136,7 +136,7 @@ python3 test.py
 
 如果成功，则会在目录下生成helmet-640-640.rknn，同时生成测试结果照片。而helmet-640-640.rknn会在RK3568板子上部署helmet detection model时用到
 
-![image]()
+![image](https://github.com/harperjuanl/helmet_yolov5_rknn_deploy/blob/main/imgs/rknn_convert.png)
 
 ## Reference
 
