@@ -4,7 +4,7 @@
 
 这里我们直接进行将已生成好的helmet-640-640.rknn模型，部署到rk3568或其他芯片的板子上的过程
 
-1. Install requirements (这里的以Debian10，Python3.7环境为例)
+1. Install requirements (以Debian10，Python3.7环境为例)
 
 ```bash
 sudo apt update
