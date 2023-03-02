@@ -44,6 +44,24 @@ python3 inference.py --img test.jpg
 
 ![image](https://github.com/harperjuanl/helmet_yolov5_rknn_deploy/blob/main/imgs/rknn_inference.png)
 
+### TroubleShooting
+
+The max version of glibc package in RK3568 chip is 2.28, which maybe is incompatible for the rknn model. If you also have the problem, you can follow the steps to manually upgrade the package
+
+```bash
+# check the glibc version
+ldd --version
+
+# Download libc6_2.29-0ubuntu1_arm64.deb from https://launchpad.net/ubuntu/+source/glibc/2.29-0ubuntu1/+build/16416023
+dpkg -X ./libc6_2.29-0ubuntu1_arm64.deb  # 解压该文件
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/linaro/tmp/ext/lib/aarch64-linux-gnu
+
+# check the updated glibc version
+ldd --version
+```
+
+
+
 ## Helmet Model convert to RKNN Model in PC platform
 
 You can also try the progress of AI model convert to rknn model in your ubuntu machine (the generated rknn model is needed in the above rk3568 chip)
