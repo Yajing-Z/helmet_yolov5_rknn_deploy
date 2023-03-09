@@ -307,7 +307,11 @@ if __name__ == '__main__':
 
     # Inference
     print('--> Running model')
+    start = time.time()
     outputs = rknn_lite.inference(inputs=[img])
+    end = time.time()
+    print('inference time: ', end - start)
+    print('done')
 
     image_src = np.array(image_src)
     detections = onnx_postprocess(outputs, Width, Height)

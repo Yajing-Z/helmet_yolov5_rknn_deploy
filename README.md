@@ -23,9 +23,11 @@ sudo pip3 install wheel
 
 ```bash
 git clone https://github.com/harperjuanl/helmet_yolov5_rknn_deploy.git
-cd helmet_yolov5_rknn_deploy/rknn_to_deploy/
+cd helmet_yolov5_rknn_deploy/rknn_to_deploy/packages
+sudo pip3 install numpy-1.21.6-cp37-cp37m-manylinux_2_17_aarch64.manylinux2014_aarch64.whl
+sudo pip3 install onnxruntime-1.14.0-cp37-cp37m-manylinux_2_17_aarch64.manylinux2014_aarch64.whl
+sudo pip3 install torch-1.13.1-cp37-cp37m-manylinux2014_aarch64.whl
 sudo pip3 install rknn_toolkit_lite2-1.4.0-cp37-cp37m-linux_aarch64.whl
-sudo pip3 install -r requirements.txt -i https://mirrors.aliyun.com/pypi/simple/
 
 # 检查Toolkit Lite2是否安装成功
 pip3 list | grep rknn-toolkit-lite2
