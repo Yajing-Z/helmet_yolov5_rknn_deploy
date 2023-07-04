@@ -63,7 +63,7 @@ python3 inference.py --img test.jpg
 
 图片检测结果可以在model里生成了test_result.jpg看到
 
-![image](https://github.com/Yajing-Z/helmet_yolov5_rknn_deploy/blob/main/imgs/rknn_inference.png)
+![image](./imgs/rknn_inference.png)
 
 #### TroubleShooting
 
@@ -142,7 +142,7 @@ python helmet_inference_rk1808.py --img test.jpg
 ```
 图片检测结果可以在model里生成了test_result.jpg看到, just take 0.06s for model inference:
 
-![image](https://github.com/Yajing-Z/helmet_yolov5_rknn_deploy/blob/main/imgs/inference_result_rk1808.png)
+![image](./imgs/inference_result_rk1808.png)
 
 ## Helmet Model convert to RKNN Model in PC platform
 
@@ -248,7 +248,7 @@ python3 test.py
 
 如果成功，则会在目录下生成helmet-640-640.rknn，同时生成测试结果照片。而helmet-640-640.rknn会在RK3568板子上部署helmet detection model时用到
 
-![image](https://github.com/Yajing-Z/helmet_yolov5_rknn_deploy/blob/main/imgs/rknn_convert.png)
+![image](./imgs/rknn_convert.png)
 
 ### RK1808(NPU): Helmet Model onnx convert to RKNN Model
 
