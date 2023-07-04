@@ -1,6 +1,25 @@
-# Helmet-YOLOv5 Model Deploy to RK3568
+# Deploy Helmet-YOLOv5 Model on RK3568, RK1808(NPU)
 
-## Helmet RKNN Model to deploy in RK3568
+- [Deploy Helmet-YOLOv5 Model on RK3568, RK1808(NPU)](#deploy-helmet-yolov5-model-on-rk3568-rk1808npu)
+  - [Deploy Helmet RKNN Model](#deploy-helmet-rknn-model)
+    - [Deploy Helmet RKNN Model on RK3568](#deploy-helmet-rknn-model-on-rk3568)
+      - [TroubleShooting](#troubleshooting)
+    - [Deploy Helmet RKNN Model on RK1808(NPU)](#deploy-helmet-rknn-model-on-rk1808npu)
+  - [Helmet Model convert to RKNN Model in PC platform](#helmet-model-convert-to-rknn-model-in-pc-platform)
+    - [RK3568: Helmet Model convert to RKNN Model](#rk3568-helmet-model-convert-to-rknn-model)
+      - [Prerequisite](#prerequisite)
+      - [Helmet Yolov5 to ONNX](#helmet-yolov5-to-onnx)
+      - [ONNX to RKNN](#onnx-to-rknn)
+    - [RK1808(NPU): Helmet Model onnx convert to RKNN Model](#rk1808npu-helmet-model-onnx-convert-to-rknn-model)
+      - [Prerequisite](#prerequisite-1)
+      - [Helmet Yolov5 to ONNX](#helmet-yolov5-to-onnx-1)
+      - [ONNX to RKNN](#onnx-to-rknn-1)
+  - [Reference](#reference)
+
+
+## Deploy Helmet RKNN Model
+
+### Deploy Helmet RKNN Model on RK3568
 
 这里我们直接进行将已生成好的helmet-640-640.rknn模型，部署到rk3568或其他芯片的板子上的过程
 
@@ -46,7 +65,7 @@ python3 inference.py --img test.jpg
 
 ![image](https://github.com/harperjuanl/helmet_yolov5_rknn_deploy/blob/main/imgs/rknn_inference.png)
 
-### TroubleShooting
+#### TroubleShooting
 
 The max version of glibc package in RK3568 chip is 2.28, which maybe is incompatible for the rknn model. If you also have the problem, you can follow the steps to manually upgrade the package
 
@@ -62,13 +81,86 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/linaro/tmp/ext/lib/aarch64-linux-g
 ldd --version
 ```
 
+### Deploy Helmet RKNN Model on RK1808(NPU)
 
+1. Enter RRK1808 from RK3568J
+   
+```bash
+# ssh RK3568J first
+
+# 查看 NIC 的当前配置，请使用 ifconfig命令 in the RK3568J
+sudo ifconfig
+
+# 要为 NIC 分配静态 IP 地址和网络掩码, enx10dcb69f302e 是RK1808虚拟网口
+sudo ifconfig enx10dcb69f302e 192.168.180.1 netmask 255.255.255.0 up
+
+# 设置路由转发，使得RK1808可以访问外网
+#设置本地ipv4转发
+sudo echo "net.ipv4.ip_forward = 1" >> /etc/sysctl.conf
+sudo sysctl -p
+#路由转发
+
+# check alternatives to iptables-legacy
+$ update-alternatives --config iptables
+
+sudo iptables -t nat -L # List the rules in a chain or all chains
+
+sudo iptables  -t  nat  -A POSTROUTING -o eth1 -j MASQUERADE
+#其中eth1 需要修改为对应的以太网标识码
+# 完成上述命令后，通过 sudo iptables -t nat -L 查看可以看到多了一行：MASQUERADE  all  --  anywhere             anywhere
+
+# ssh to RK1808 from RK3568J
+linaro@linaro-alip:~$ ssh toybrick@192.168.180.8
+toybrick@192.168.180.8's password:
+Linux debian10.toybrick 4.4.194 #7 SMP PREEMPT Tue Oct 27 15:35:44 CST 2020 aarch64
+...
+
+```
+
+2. Install depencies
+
+```bash
+pip install torch==1.6.0
+pip install opencv-python==4.4.0.46
+pip install Pillow==5.3.0
+```
+
+3. Toolkit Lite 1.4.0 has installed on RK1808
+```bash
+# 在 RK1808M0计算棒上
+# rknn-toolkit 版本是 1.4.0
+toybrick@debian10:~$ pip list | grep rknn
+rknn-toolkit-lite 1.4.0
+```
+
+1. Model deployment and inference test
+   
+```bash
+cd rknn_to_deploy/examples/yolov5s-rk1808
+# you can also upload images to the folder and choose the image you want to detect
+python helmet_inference_rk1808.py --img test.jpg  
+```
+图片检测结果可以在model里生成了test_result.jpg看到, just take 0.06s for model inference:
+
+![image](https://github.com/harperjuanl/helmet_yolov5_rknn_deploy/blob/main/imgs/inference_result_rk1808.png)
 
 ## Helmet Model convert to RKNN Model in PC platform
 
+For the convertment of the RKNN model from [rockchip-linux](https://github.com/rockchip-linux/rknn-toolkit), need to know:
+
+- **RK1808**/RK1806/RV1109/RV1126: https://github.com/rockchip-linux/rknn-toolkit
+
+- For RK3566/**RK3568**/RK3588/RK3588S/RV1103/RV1106, please refer to:
+https://github.com/rockchip-linux/rknn-toolkit2
+
+From [rockchip-linux_pytorch_yolov5s_example](https://github.com/rockchip-linux/rknn-toolkit/tree/master/examples/pytorch/yolov5), need to know that require upgrading the **rknn_toolkit version to 1.7.1** to load the yolov5 pytorch model.
+
+
+### RK3568: Helmet Model convert to RKNN Model
+
 You can also try the progress of AI model convert to rknn model in your ubuntu machine (the generated rknn model is needed in the above rk3568 chip)
 
-### Prerequisite
+#### Prerequisite
 
 1. 安装基础依赖（我们这里使用的环境是PC ubuntu20.04，ubuntu20.04默认是安装了python3.8.10）
 
@@ -116,7 +208,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 >>>
 ```
 
-### Helmet Yolov5 to ONNX
+#### Helmet Yolov5 to ONNX
 
 将helmet.pt转成helmet.onnx
 
@@ -138,7 +230,7 @@ python3 export.py --weights ./weights/helmet.pt --img-size 640 --batch 1 --rknn_
 
 如果成功，则会在weights中生成helmet.onnx
 
-### ONNX to RKNN
+#### ONNX to RKNN
 
 将helmet.onnx转成helmet.rknn
 
@@ -158,6 +250,90 @@ python3 test.py
 
 ![image](https://github.com/harperjuanl/helmet_yolov5_rknn_deploy/blob/main/imgs/rknn_convert.png)
 
+### RK1808(NPU): Helmet Model onnx convert to RKNN Model
+
+You can also try the progress of AI model convert to rknn model in your ubuntu machine.
+
+#### Prerequisite
+
+1. 安装基础依赖（我们这里使用的环境是PC ubuntu20.04，ubuntu20.04安装了python3.6.14）
+
+```bash
+# Apply for the Nimbus Ubuntu20.04 VM in the DBC
+/mts/git/bin/nimbus deploy ovf atlas-ubuntu-vm-7 http://sc-prd-rdops-templates.eng.vmware.com/nimbus-templates/atlas-ubuntu-20-4/atlas-ubuntu-20-04/atlas-ubuntu-20-04.ovf --cpus=16 --memory 32768
+
+#Logging on to the VM
+user name/password: vmware/B1gd3m0z
+$ ssh vmware@<your_vm_ip>
+
+# Run the below command in the VM
+sudo apt install libsqlite3-dev
+
+# Install Python 3.6.14
+# 从官网下载https://www.python.org/downloads/
+wget https://www.python.org/ftp/python/3.6.14/Python-3.6.14.tgz
+tar -xzvf Python-3.6.14.tgz
+
+# build
+cd Python-3.6.14
+sudo ./configure --prefix=/usr/local/python3 --enable-loadable-sqlite-extensions
+sudo make install
+
+# Python 3.6 is installed now.
+
+# Installed virtualenv 
+sudo /usr/local/python3/bin/python3 -m pip install virtualenv
+virtualenv rknnenv
+$ python
+Python 3.6.14 (default, Jul  3 2023, 03:42:21)
+[GCC 9.3.0] on linux
+Type "help", "copyright", "credits" or "license
+>>>
+```
+
+2. 安装rknn-toolkit-1.7.1
+
+```bash
+# Install rknn_toolkit-1.7.1 on the python3.6 virtualenv
+
+# Download url: https://github.com/rockchip-linux/rknn-toolkit/releases/tag/v1.7.1
+pip install rknn_toolkit-1.7.1-cp36-cp36m-linux_x86_64.whl
+
+```
+
+3. 检查 RKNN-Toolkit 是否安装成功
+   
+```bash
+$ python
+Python 3.6.14 (default, Jul  3 2023, 03:42:21)
+[GCC 9.3.0] on linux
+Type "help", "copyright", "credits" or "license
+>>>from rknn.api import RKNN
+>>>
+```
+
+#### Helmet Yolov5 to ONNX
+
+Refer to `Helmet Yolov5 to ONNX` of `RK3568: Helmet Model convert to RKNN Model`. 
+
+Thus we directly use the [onnx model (helmet.onnx)](https://github.com/Yajing-Z/helmet_yolov5_rknn_deploy/blob/main/onnx_to_rknn/examples/onnx/yolov5s/helmet.onnx)
+
+#### ONNX to RKNN
+
+将helmet.onnx转成helmet.rknn
+
+Refer to `ONNX to RKNN` of `RK3568: Helmet Model convert to RKNN Model`. 
+
+You can directly use the [onnx2rknn.py](https://github.com/Yajing-Z/helmet_yolov5_rknn_deploy/blob/main/onnx_to_rknn/examples/onnx/yolov5s/onnx2rknn.py), just need to add the `target_platform = 'rk1808'`, as below:
+
+```bash
+        # Run the below if you plan to run rknn model on the RK1808
+        rknn.config(mean_values=[[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]],
+                   std_values=[[255.0, 255.0, 255.0, 255.0, 255.0, 255.0, 255.0, 255.0, 255.0, 255.0, 255.0, 255.0]],
+                   batch_size=opt.batch_size,
+                   target_platform = 'rk1808')
+```
+
 ## Reference
 
 参考来源：https://github.com/rockchip-linux/rknn-toolkit2
@@ -165,3 +341,5 @@ python3 test.py
 参考来源：https://github.com/ultralytics/yolov5
 
 参考来源：https://github.com/Dreamdreams8/yolov5s_rknn_deploy
+
+参考来源：https://github.com/rockchip-linux/rknn-toolkit
