@@ -21,6 +21,11 @@ if __name__ == '__main__':
         rknn.config(mean_values=[[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]],
                     std_values=[[255.0, 255.0, 255.0, 255.0, 255.0, 255.0, 255.0, 255.0, 255.0, 255.0, 255.0, 255.0]],
                     batch_size=opt.batch_size)  # reorder_channel='0 1 2',
+        # Run the below if you plan to run rknn model on the RK1808
+        # rknn.config(mean_values=[[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]],
+        #            std_values=[[255.0, 255.0, 255.0, 255.0, 255.0, 255.0, 255.0, 255.0, 255.0, 255.0, 255.0, 255.0]],
+        #            batch_size=opt.batch_size,
+        #            target_platform = 'rk1808')
     else:
         rknn.config(channel_mean_value='0 0 0 255', reorder_channel='2 1 0', batch_size=opt.batch_size)
     # Load tensorflow model
