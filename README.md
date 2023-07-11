@@ -140,7 +140,7 @@ cd rknn_to_deploy/examples/yolov5s-rk1808
 # you can also upload images to the folder and choose the image you want to detect
 python helmet_inference_rk1808.py --img test.jpg  
 ```
-图片检测结果可以在model里生成了test_result.jpg看到, just take 0.06s for model inference:
+图片检测结果可以在model里生成了test_result.jpg看到, just take 0.06s for model inference, 相比较于原来的RK3568芯片处理一张照片十几秒，优化了近两百倍:
 
 ![image](./imgs/inference_result_rk1808.png)
 
